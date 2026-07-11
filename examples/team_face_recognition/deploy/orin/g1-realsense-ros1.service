@@ -1,0 +1,16 @@
+[Unit]
+Description=G1 D435i ROS1 camera publisher
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/g1_camera_bridge/start_realsense_ros1.sh
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=10
+Environment=ROS_MASTER_URI=http://127.0.0.1:11311
+Environment=ROS_IP=192.168.123.164
+
+[Install]
+WantedBy=default.target

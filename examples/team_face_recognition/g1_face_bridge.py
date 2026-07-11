@@ -11,6 +11,7 @@ import argparse
 import json
 import socket
 import time
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Sequence
@@ -168,7 +169,10 @@ class FaceRecognitionBridge(Node):  # type: ignore[misc]
     def __init__(self, config: BridgeConfig):
         if ROS_IMPORT_ERROR is not None:
             raise RuntimeError(f"ROS2 Python packages are unavailable: {ROS_IMPORT_ERROR}")
-        super().__init__("g1_face_recognition_bridge")
+        # This service only needs console logging. Disabling the ROS 2 /rosout
+        # publisher also prevents a Foxy ros1_bridge from auto-creating an
+        # incompatible Jazzy -> ROS 1 log bridge alongside the camera bridge.
+        super().__init__("g1_face_recognition_bridge", enable_rosout=False)
         self.config = config
         with FaceDatabase(config.database) as database:
             samples = database.samples()
@@ -192,6 +196,7 @@ class FaceRecognitionBridge(Node):  # type: ignore[misc]
         self.latest_depth_stamp_ns = 0
         self.last_inference_monotonic = 0.0
         self.sequence = 0
+        self.session_id = str(uuid.uuid4())
         self.udp_publisher = UdpJsonPublisher(config.agent_udp_host, config.agent_udp_port)
         self.result_publisher = self.create_publisher(String, config.result_topic, 10)
         self.depth_subscription = self.create_subscription(
@@ -270,8 +275,12 @@ class FaceRecognitionBridge(Node):  # type: ignore[misc]
         payload = {
             "schema_version": SCHEMA_VERSION,
             "event": "face_recognition",
+            "event_id": str(uuid.uuid4()),
+            "session_id": self.session_id,
             "sequence": self.sequence,
+            "created_unix_ns": time.time_ns(),
             "timestamp_ns": rgb_stamp_ns,
+            "source_name": "dgx_face",
             "source": {
                 "frame_id": str(message.header.frame_id),
                 "rgb_topic": self.config.rgb_topic,
@@ -281,6 +290,7 @@ class FaceRecognitionBridge(Node):  # type: ignore[misc]
             "faces": faces,
             "inference_ms": round((time.perf_counter() - started) * 1000.0, 2),
             "model": self.config.model_name,
+            "is_final": True,
         }
         ros_message = String()
         ros_message.data = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
@@ -297,9 +307,9 @@ class FaceRecognitionBridge(Node):  # type: ignore[misc]
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--rgb-topic", default="/camera/camera/color/image_raw")
-    parser.add_argument("--depth-topic", default="/camera/camera/aligned_depth_to_color/image_raw")
-    parser.add_argument("--result-topic", default="/ai/face_recognition/results")
+    parser.add_argument("--rgb-topic", default="/camera/color/image_raw")
+    parser.add_argument("--depth-topic", default="/camera/aligned_depth_to_color/image_raw")
+    parser.add_argument("--result-topic", default="/ai/face_recognition/internal")
     parser.add_argument("--db", type=Path, default=Path("/data/team_faces.sqlite3"))
     parser.add_argument("--model", default="buffalo_l")
     parser.add_argument("--model-root", default="/models")

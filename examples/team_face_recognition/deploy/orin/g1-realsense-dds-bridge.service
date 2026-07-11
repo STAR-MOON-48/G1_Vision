@@ -1,0 +1,17 @@
+[Unit]
+Description=G1 D435i ROS1 to ROS2 DDS bridge
+After=network-online.target g1-realsense-ros1.service
+Wants=network-online.target g1-realsense-ros1.service
+
+[Service]
+Type=simple
+ExecStart=%h/g1_camera_bridge/start_ros1_bridge.sh
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=10
+Environment=ROS_MASTER_URI=http://127.0.0.1:11311
+Environment=ROS_IP=192.168.123.164
+Environment=ROS_DOMAIN_ID=10
+
+[Install]
+WantedBy=default.target

@@ -9,21 +9,24 @@ services:
     restart: unless-stopped
     environment:
       ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-0}"
-      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      # Match the Foxy ros1_bridge on ORIN. Mixing CycloneDDS and Fast DDS for
+      # large Image samples made the older bridge intermittently abort.
+      RMW_IMPLEMENTATION: "${CAMERA_RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}"
       CYCLONEDDS_URI: file:///app/team_face_recognition/deploy/cyclonedds.xml
       PYTHONUNBUFFERED: "1"
     volumes:
-      - ./runtime/models:/models:ro
+      # InsightFace resolves <root>/models/<model_name>; --model-root defaults to /models.
+      - ./runtime/models:/models/models:ro
       - ./runtime/data:/data:ro
     command:
       - python3
       - /app/team_face_recognition/g1_face_bridge.py
       - --rgb-topic
-      - ${RGB_TOPIC:-/camera/camera/color/image_raw}
+      - ${RGB_TOPIC:-/camera/color/image_raw}
       - --depth-topic
-      - ${DEPTH_TOPIC:-/camera/camera/aligned_depth_to_color/image_raw}
+      - ${DEPTH_TOPIC:-/camera/aligned_depth_to_color/image_raw}
       - --result-topic
-      - ${RESULT_TOPIC:-/ai/face_recognition/results}
+      - ${RESULT_TOPIC:-/ai/face_recognition/internal}
       - --max-rate-hz
       - ${MAX_RATE_HZ:-5}
       - --agent-udp-host

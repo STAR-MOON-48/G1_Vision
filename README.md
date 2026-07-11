@@ -4,7 +4,10 @@
 
 本项目不重新训练人脸模型，而是使用 InsightFace 提取归一化人脸特征，将团队成员的稳定 ID 与多个人脸模板保存在 SQLite 中。运行时从 G1 的 RGB/Depth 数据流识别人脸，并把结构化结果发布给 DGX Spark 上的本地 Agent。
 
-> 当前状态：Windows 录入与识别 Demo 已完成；两人底库验证通过；DGX Spark ROS2/DDS 桥接与容器部署代码已实现，D435i 实际话题联调进行中。
+> 当前状态：Windows 录入与识别 Demo、两人底库、G1 D435i RGB/Depth、DGX 推理和 Agent 原生 DDS 全链路均已完成真机验证。
+
+真机启动、Agent 订阅、验收与故障排查见
+[`docs/G1_FACE_RECOGNITION_USER_GUIDE.md`](docs/G1_FACE_RECOGNITION_USER_GUIDE.md)。
 
 ## 系统架构
 
@@ -12,7 +15,7 @@
 flowchart LR
     D435["Intel RealSense D435i"]
     ORIN["G1 / ORIN NX<br/>只转发 Raw Data"]
-    LAN["192.168.123.0/24<br/>ROS2 / DDS Domain 0"]
+    LAN["192.168.123.0/24<br/>Camera DDS Domain 10<br/>Unitree HRI DDS Domain 0"]
     BRIDGE["DGX Spark<br/>Face Recognition Bridge"]
     DB["SQLite 人脸特征库"]
     ROS["ROS2 结果话题"]
@@ -33,7 +36,7 @@ flowchart LR
 | G1 ORIN NX | `192.168.123.164` | 发布 D435i RGB 与 Depth 原始流，不运行 AI 算法 |
 | DGX Spark G1 网口 | `enP7s7` / `192.168.123.100` | 订阅 G1 ROS2/DDS 数据 |
 | DGX Spark 外联网口 | `172.16.21.132` | 连接互联网、Windows 开发机与本地 Agent |
-| Face Bridge | ROS Domain `0` | 人脸检测、识别、深度距离估算与结果发布 |
+| Face Bridge | 相机 Domain `10`；Agent Domain `0` | 人脸检测、识别、深度距离估算与结果发布 |
 
 ## 已实现能力
 
@@ -46,7 +49,7 @@ flowchart LR
 - 分组留一验证：验证时同时排除原图及其增强副本，避免数据泄漏。
 - ROS2 RGB/Depth 图像解析和人脸区域深度中值估算。
 - ROS2 JSON 结果发布与本机 UDP Agent 输出。
-- DGX Spark ARM64 Docker、CycloneDDS 和双网卡配置。
+- DGX Spark ARM64 Docker、Fast DDS 相机域、Unitree SDK2 Agent DDS 和双网卡配置。
 
 ## 当前验证结果
 
@@ -162,7 +165,7 @@ face_datasets/
 
 ## DGX Spark 部署
 
-目标环境：ARM64、Ubuntu 24.04、Docker、ROS2 Jazzy、CycloneDDS。
+目标环境：ARM64、Ubuntu 24.04、Docker、ROS2 Jazzy、Fast DDS。
 
 ### 1. 准备只读运行数据
 
@@ -185,16 +188,17 @@ cp .env.example .env
 默认值：
 
 ```dotenv
-ROS_DOMAIN_ID=0
-RGB_TOPIC=/camera/camera/color/image_raw
-DEPTH_TOPIC=/camera/camera/aligned_depth_to_color/image_raw
-RESULT_TOPIC=/ai/face_recognition/results
+ROS_DOMAIN_ID=10
+CAMERA_RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+RGB_TOPIC=/camera/color/image_raw
+DEPTH_TOPIC=/camera/aligned_depth_to_color/image_raw
+RESULT_TOPIC=/ai/face_recognition/internal
 MAX_RATE_HZ=5
 AGENT_UDP_HOST=127.0.0.1
 AGENT_UDP_PORT=17171
 ```
 
-G1 上的 RealSense 话题可能使用自定义命名空间，部署前必须用 `ros2 topic list -t` 确认并修改 `.env`。
+真机已确认使用上述 RGB 和对齐 Depth Topic。
 
 ### 3. 构建并启动
 
@@ -204,13 +208,14 @@ docker compose up -d
 docker compose logs -f g1-face-bridge
 ```
 
-容器使用 host network；CycloneDDS 只绑定 `enP7s7`，不会把机器人 DDS 流量发送到外联网卡。
+容器使用 host network；相机流在 Domain 10 上使用 Fast DDS，Agent 结果由独立 relay 在 `enP7s7`、Domain 0 上使用 Unitree SDK2 原生 DDS 发布。
 
 ## Agent 接口
 
 每次处理 RGB 帧后，桥接服务同时发布：
 
-1. ROS2 `std_msgs/String`：`/ai/face_recognition/results`
+1. 原生 DDS `g1_hri.msg.FaceRecognition`：`rt/g1/hri/vision/face_recognition`（Agent 正式接口）
+2. ROS2 `std_msgs/String`：`/ai/face_recognition/internal`（容器内部验收接口）
 2. UDP JSON：`127.0.0.1:17171`
 
 消息示例：
@@ -223,8 +228,8 @@ docker compose logs -f g1-face-bridge
   "timestamp_ns": 1783742400000000000,
   "source": {
     "frame_id": "camera_color_optical_frame",
-    "rgb_topic": "/camera/camera/color/image_raw",
-    "depth_topic": "/camera/camera/aligned_depth_to_color/image_raw",
+    "rgb_topic": "/camera/color/image_raw",
+    "depth_topic": "/camera/aligned_depth_to_color/image_raw",
     "depth_age_ms": 18.2
   },
   "faces": [
