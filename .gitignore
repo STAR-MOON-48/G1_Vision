@@ -84,6 +84,9 @@ celerybeat-schedule
 
 # Local team-face demo artifacts (crops, biometric embeddings, SQLite database)
 .face_demo/
+face_datasets/
+*.onnx
+*.sqlite3
 examples/team_face_recognition/deploy/runtime/
 
 # virtualenv

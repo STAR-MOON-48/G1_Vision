@@ -1,0 +1,9 @@
+**/*
+!python-package/
+!python-package/**
+!examples/
+!examples/team_face_recognition/
+!examples/team_face_recognition/**
+examples/team_face_recognition/deploy/runtime/**
+**/__pycache__/**
+**/*.pyc
