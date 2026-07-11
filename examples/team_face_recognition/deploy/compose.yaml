@@ -1,0 +1,37 @@
+services:
+  g1-face-bridge:
+    image: g1-face-bridge:latest
+    build:
+      context: ../../..
+      dockerfile: examples/team_face_recognition/deploy/Dockerfile
+    network_mode: host
+    ipc: host
+    restart: unless-stopped
+    environment:
+      ROS_DOMAIN_ID: "${ROS_DOMAIN_ID:-0}"
+      RMW_IMPLEMENTATION: rmw_cyclonedds_cpp
+      CYCLONEDDS_URI: file:///app/team_face_recognition/deploy/cyclonedds.xml
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      - ./runtime/models:/models:ro
+      - ./runtime/data:/data:ro
+    command:
+      - python3
+      - /app/team_face_recognition/g1_face_bridge.py
+      - --rgb-topic
+      - ${RGB_TOPIC:-/camera/camera/color/image_raw}
+      - --depth-topic
+      - ${DEPTH_TOPIC:-/camera/camera/aligned_depth_to_color/image_raw}
+      - --result-topic
+      - ${RESULT_TOPIC:-/ai/face_recognition/results}
+      - --max-rate-hz
+      - ${MAX_RATE_HZ:-5}
+      - --agent-udp-host
+      - ${AGENT_UDP_HOST:-127.0.0.1}
+      - --agent-udp-port
+      - ${AGENT_UDP_PORT:-17171}
+    logging:
+      driver: json-file
+      options:
+        max-size: 20m
+        max-file: "3"

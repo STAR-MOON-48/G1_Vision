@@ -1,298 +1,281 @@
-
-# InsightFace: 2D and 3D Face Analysis Project
-
-<div align="left">
-  <img src="https://raw.githubusercontent.com/nttstar/insightface-resources/refs/heads/master/images/insightface_logo.jpg_320x320.webp" width="240"/>
-</div>
-
-InsightFace project is mainly maintained by [Jia Guo](mailto:guojia@insightface.ai) and [Jiankang Deng](https://jiankangdeng.github.io/). 
-
-For more information, please visit our website at [https://insightface.ai](https://insightface.ai)
-
-## InsightFace 1.0 Update
-
-InsightFace 1.0 focuses on easier local evaluation and desktop usage:
-
-- The default Python package no longer builds the optional C++/Cython `face3d` extension, reducing local compiler requirements.
-- Added **InsightFace Evaluation Studio**, a cross-platform GUI Demo for Windows, macOS, and Linux.
-- The GUI supports local face recognition, enterprise model evaluation/reporting, and basic face swap trials.
-
-## License
-
-The code of InsightFace is released under the MIT License. There is no limitation for both academic and commercial usage.
-
-The training data containing the annotation (and the models trained with these data) are available for non-commercial research purposes only.
-
-Both manual-downloading models from our github repo and auto-downloading models with our [python-library](python-package) follow the above license policy(which is for non-commercial research purposes only).
-
-`2025-11-24 Update:`
-
-1. For inswapper series face swap models (e.g., inswapper_128.onnx/[inswapper-512-live](https://github.com/deepinsight/inswapper-512-live)), please contact [contact@insightface.ai](mailto:contact@insightface.ai) for licensing and additional support.
-2. For open-sourced face recognition models (e.g., buffalo_l package), please contact [recognition-oss-pack@insightface.ai](mailto:recognition-oss-pack@insightface.ai) for licensing.
-3. For advanced face recognition SDK and models (e.g., InspireFace SDK), please contact [contact@insightface.ai](mailto:contact@insightface.ai) for licensing and additional support.
-
-
-## Top News
-
-**`2026-05-23`** `InsightFace 1.0` Added a cross-platform desktop GUI Demo for face recognition, enterprise evaluation, reports, and face swap trials, with a lighter default Python install that removes C++ build requirements.
-
-**`2025-11-18`** `[Picsi.ai]` Released Live Face Swap macOS & iOS App and updated [Picsi.ai](https://www.picsi.ai) services with our latest series of swap models (incl. [inswapper-512-live](https://github.com/deepinsight/inswapper-512-live)/Cyn/Dax).
-
-**`2024-05-04`** `[Picsi.ai]` Released [InspireFace](cpp-package/inspireface), a cross-platform C/C++ face recognition SDK.
-
-**`2022-08-12`**: We achieved Rank-1st of 
-[Perspective Projection Based Monocular 3D Face Reconstruction Challenge](https://tianchi.aliyun.com/competition/entrance/531961/introduction)
-of [ECCV-2022 WCPA Workshop](https://sites.google.com/view/wcpa2022), [paper](https://arxiv.org/abs/2208.07142) and [code](reconstruction/jmlr).
-
-**`2021-10-29`**: We achieved 1st place on the [VISA track](https://pages.nist.gov/frvt/plots/11/visa.html) of [NIST-FRVT 1:1](https://pages.nist.gov/frvt/html/frvt11.html) by using Partial FC (Xiang An, Jiankang Deng, Jia Guo).
-
-## ChangeLogs
-
-**`2025-11-18`** `[Picsi.ai]` Released Live Face Swap macOS & iOS App and updated [Picsi.ai](https://www.picsi.ai) services with our latest series of swap models (incl. [inswapper-live](https://github.com/deepinsight/inswapper-512-live)/Cyn/Dax).
-
-**`2024-05-04`** `[Picsi.ai]` Released [InspireFace](cpp-package/inspireface), a cross-platform C/C++ face recognition SDK.
-
-**`2024-04-17`**: [Monocular Identity-Conditioned Facial Reflectance Reconstruction](https://arxiv.org/abs/2404.00301) accepted by [CVPR-2024](https://cvpr.thecvf.com/Conferences/2024).
-
-**`2023-08-08`**: We released the implementation of [Generalizing Gaze Estimation with Weak-Supervision from Synthetic Views](https://arxiv.org/abs/2212.02997) at [reconstruction/gaze](reconstruction/gaze).
-
-**`2023-05-03`**: We have launched the ongoing version of wild face anti-spoofing challenge. See details [here](https://github.com/deepinsight/insightface/tree/master/challenges/cvpr23-fas-wild#updates).
-
-**`2023-02-13`**: We launch a large scale in the wild face anti-spoofing challenge on CVPR23 Workshop, see details at [challenges/cvpr23-fas-wild](challenges/cvpr23-fas-wild).
-
-**`2022-11-28`**: Single line code for facial identity swapping in our python packge ver 0.7, please check the example [here](examples/in_swapper).
-
-**`2022-10-28`**: [MFR-Ongoing](http://iccv21-mfr.com) website is refactored, please create issues if there's any bug.
-
-**`2022-09-22`**: Now we have [web-demos](web-demos): [face-localization](http://demo.insightface.ai:7007/), [face-recognition](http://demo.insightface.ai:7008/), and [face-swapping](http://demo.insightface.ai:7009/).
-
-**`2022-08-12`**: We achieved Rank-1st of 
-[Perspective Projection Based Monocular 3D Face Reconstruction Challenge](https://tianchi.aliyun.com/competition/entrance/531961/introduction)
-of [ECCV-2022 WCPA Workshop](https://sites.google.com/view/wcpa2022), [paper](https://arxiv.org/abs/2208.07142) and [code](reconstruction/jmlr).
-
-**`2022-03-30`**: [Partial FC](https://arxiv.org/abs/2203.15565) accepted by CVPR-2022.
-
-**`2022-02-23`**: [SCRFD](detection/scrfd) accepted by [ICLR-2022](https://iclr.cc/Conferences/2022).
-
-**`2021-11-30`**: [MFR-Ongoing](challenges/mfr) challenge launched(same with IFRT), which is an extended version of [iccv21-mfr](challenges/iccv21-mfr).
-
-**`2021-10-29`**: We achieved 1st place on the [VISA track](https://pages.nist.gov/frvt/plots/11/visa.html) of [NIST-FRVT 1:1](https://pages.nist.gov/frvt/html/frvt11.html) by using Partial FC (Xiang An, Jiankang Deng, Jia Guo).
-
-**`2021-10-11`**: [Leaderboard](https://insightface.ai/mfr21) of [ICCV21 - Masked Face Recognition Challenge](challenges/iccv21-mfr) released. Video: [Youtube](https://www.youtube.com/watch?v=lL-7l5t6x2w), [Bilibili](https://www.bilibili.com/video/BV15b4y1h79N/).
-
-**`2021-06-05`**: We launch a [Masked Face Recognition Challenge & Workshop](challenges/iccv21-mfr) on ICCV 2021.
-
-
-
-## Introduction
-
-[InsightFace](https://insightface.ai) is an open source 2D&3D deep face analysis toolbox, mainly based on PyTorch and MXNet. 
-
-Please check our [website](https://insightface.ai) for detail.
-
-The master branch works with **PyTorch 1.6+** and/or **MXNet=1.6-1.8**, with **Python 3.x**.
-
-InsightFace efficiently implements a rich variety of state of the art algorithms of face recognition, face detection and face alignment, which optimized for both training and deployment.
-
-## Quick Start
-
-Please start with our [python-package](python-package/), for testing detection, recognition and alignment models on input images.
-
-
-### ArcFace Video Demo
-
-
-[<img src=https://raw.githubusercontent.com/nttstar/insightface-resources/refs/heads/master/images/facerecognitionfromvideo.PNG width="760" />](https://www.youtube.com/watch?v=y-D1tReryGA&t=81s)
-
-
-Please click the image to watch the Youtube video. For Bilibili users, click [here](https://www.bilibili.com/video/av38041494?from=search&seid=11501833604850032313).
-
-
-
-## Projects
-
-The [page](https://insightface.ai/projects) on InsightFace website also describes all supported projects in InsightFace.
-
-You may also interested in some [challenges](https://insightface.ai/challenges) hold by InsightFace.
-
-
-
-## Face Recognition
-
-### Introduction
-
-In this module, we provide training data, network settings and loss designs for deep face recognition.
-
-The supported methods are as follows:
-
-- [x] [ArcFace_mxnet (CVPR'2019)](recognition/arcface_mxnet)
-- [x] [ArcFace_torch (CVPR'2019)](recognition/arcface_torch)
-- [x] [SubCenter ArcFace (ECCV'2020)](recognition/subcenter_arcface)
-- [x] [PartialFC_mxnet (CVPR'2022)](recognition/partial_fc)
-- [x] [PartialFC_torch (CVPR'2022)](recognition/arcface_torch)
-- [x] [VPL (CVPR'2021)](recognition/vpl)
-- [x] [Arcface_oneflow](recognition/arcface_oneflow)
-- [x] [ArcFace_Paddle (CVPR'2019)](recognition/arcface_paddle)
-
-Commonly used network backbones are included in most of the methods, such as IResNet, MobilefaceNet, MobileNet, InceptionResNet_v2, DenseNet, etc..
-
-
-### Datasets
-
-The training data includes, but not limited to the cleaned MS1M, VGG2 and CASIA-Webface datasets, which were already packed in MXNet binary format. Please [dataset](recognition/_datasets_) page for detail.
-
-### Evaluation
-
-We provide standard IJB and Megaface evaluation pipelines in [evaluation](recognition/_evaluation_)
-
-
-### Pretrained Models
-
-**Please check [Model-Zoo](https://github.com/deepinsight/insightface/wiki/Model-Zoo) for more pretrained models.**
-
-### Third-party Re-implementation of ArcFace
-
-- TensorFlow: [InsightFace_TF](https://github.com/auroua/InsightFace_TF)
-- TensorFlow: [tf-insightface](https://github.com/AIInAi/tf-insightface)
-- TensorFlow:[insightface](https://github.com/Fei-Wang/insightface)
-- PyTorch: [InsightFace_Pytorch](https://github.com/TreB1eN/InsightFace_Pytorch)
-- PyTorch: [arcface-pytorch](https://github.com/ronghuaiyang/arcface-pytorch)
-- Caffe: [arcface-caffe](https://github.com/xialuxi/arcface-caffe)
-- Caffe: [CombinedMargin-caffe](https://github.com/gehaocool/CombinedMargin-caffe)
-- Tensorflow: [InsightFace-tensorflow](https://github.com/luckycallor/InsightFace-tensorflow)
-- TensorRT: [wang-xinyu/tensorrtx](https://github.com/wang-xinyu/tensorrtx)  
-- TensorRT: [InsightFace-REST](https://github.com/SthPhoenix/InsightFace-REST)
-- ONNXRuntime C++: [ArcFace-ONNXRuntime](https://github.com/DefTruth/lite.ai.toolkit/blob/main/lite/ort/cv/glint_arcface.cpp)
-- ONNXRuntime Go: [arcface-go](https://github.com/jack139/arcface-go)
-- MNN: [ArcFace-MNN](https://github.com/DefTruth/lite.ai.toolkit/blob/main/lite/mnn/cv/mnn_glint_arcface.cpp)
-- TNN: [ArcFace-TNN](https://github.com/DefTruth/lite.ai.toolkit/blob/main/lite/tnn/cv/tnn_glint_arcface.cpp)
-- NCNN: [ArcFace-NCNN](https://github.com/DefTruth/lite.ai.toolkit/blob/main/lite/ncnn/cv/ncnn_glint_arcface.cpp)
-
-## Face Detection
-
-### Introduction
-
-<div align="left">
-  <img src="https://raw.githubusercontent.com/nttstar/insightface-resources/refs/heads/master/images/11513D05.jpg" width="640"/>
-</div>
-
-In this module, we provide training data with annotation, network settings and loss designs for face detection training, evaluation and inference.
-
-The supported methods are as follows:
-
-- [x] [RetinaFace (CVPR'2020)](detection/retinaface)
-- [x] [SCRFD (Arxiv'2021)](detection/scrfd)
-- [x] [blazeface_paddle](detection/blazeface_paddle)
-
-[RetinaFace](detection/retinaface) is a practical single-stage face detector which is accepted by [CVPR 2020](https://openaccess.thecvf.com/content_CVPR_2020/html/Deng_RetinaFace_Single-Shot_Multi-Level_Face_Localisation_in_the_Wild_CVPR_2020_paper.html). We provide training code, training dataset, pretrained models and evaluation scripts. 
-
-[SCRFD](detection/scrfd) is an efficient high accuracy face detection approach which is initialy described in [Arxiv](https://arxiv.org/abs/2105.04714). We provide an easy-to-use pipeline to train high efficiency face detectors with NAS supporting.
-
-
-## Face Alignment
-
-### Introduction
-
-<div align="left">
-  <img src="https://raw.githubusercontent.com/nttstar/insightface-resources/refs/heads/master/images/thumb_sdunet.png" width="600"/>
-</div>
-
-In this module, we provide datasets and training/inference pipelines for face alignment.
-
-Supported methods:
-
-- [x] [SDUNets (BMVC'2018)](alignment/heatmap)
-- [x] [SimpleRegression](alignment/coordinate_reg)
-
-
-[SDUNets](alignment/heatmap) is a heatmap based method which accepted on [BMVC](http://bmvc2018.org/contents/papers/0051.pdf).
-
-[SimpleRegression](alignment/coordinate_reg) provides very lightweight facial landmark models with fast coordinate regression. The input of these models is loose cropped face image while the output is the direct landmark coordinates.
-
-
-## Citation
-
-If you find *InsightFace* useful in your research, please consider to cite the following related papers:
-
+# G1 Vision：宇树 G1 人脸识别中间件
+
+基于 [InsightFace](https://github.com/deepinsight/insightface) 的小规模开放集人脸识别项目，面向宇树机器人 G1、Intel RealSense D435i 和 NVIDIA DGX Spark 的局域网部署。
+
+本项目不重新训练人脸模型，而是使用 InsightFace 提取归一化人脸特征，将团队成员的稳定 ID 与多个人脸模板保存在 SQLite 中。运行时从 G1 的 RGB/Depth 数据流识别人脸，并把结构化结果发布给 DGX Spark 上的本地 Agent。
+
+> 当前状态：Windows 录入与识别 Demo 已完成；两人底库验证通过；DGX Spark ROS2/DDS 桥接与容器部署代码已实现，D435i 实际话题联调进行中。
+
+## 系统架构
+
+```mermaid
+flowchart LR
+    D435["Intel RealSense D435i"]
+    ORIN["G1 / ORIN NX<br/>只转发 Raw Data"]
+    LAN["192.168.123.0/24<br/>ROS2 / DDS Domain 0"]
+    BRIDGE["DGX Spark<br/>Face Recognition Bridge"]
+    DB["SQLite 人脸特征库"]
+    ROS["ROS2 结果话题"]
+    UDP["本机 UDP JSON"]
+    AGENT["Local Agent"]
+
+    D435 -->|RGB + Aligned Depth| ORIN
+    ORIN --> LAN --> BRIDGE
+    DB --> BRIDGE
+    BRIDGE --> ROS
+    BRIDGE --> UDP --> AGENT
 ```
-@inproceedings{ren2023pbidr,
-  title={Facial Geometric Detail Recovery via Implicit Representation},
-  author={Ren, Xingyu and Lattas, Alexandros and Gecer, Baris and Deng, Jiankang and Ma, Chao and Yang, Xiaokang},
-  booktitle={2023 IEEE 17th International Conference on Automatic Face and Gesture Recognition (FG)},  
-  year={2023}
- }
 
-@article{guo2021sample,
-  title={Sample and Computation Redistribution for Efficient Face Detection},
-  author={Guo, Jia and Deng, Jiankang and Lattas, Alexandros and Zafeiriou, Stefanos},
-  journal={arXiv preprint arXiv:2105.04714},
-  year={2021}
-}
+硬件与网络规划：
 
-@inproceedings{gecer2021ostec,
-  title={OSTeC: One-Shot Texture Completion},
-  author={Gecer, Baris and Deng, Jiankang and Zafeiriou, Stefanos},
-  booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-  year={2021}
-}
+| 设备 | 地址/接口 | 职责 |
+|---|---|---|
+| G1 ORIN NX | `192.168.123.164` | 发布 D435i RGB 与 Depth 原始流，不运行 AI 算法 |
+| DGX Spark G1 网口 | `enP7s7` / `192.168.123.100` | 订阅 G1 ROS2/DDS 数据 |
+| DGX Spark 外联网口 | `172.16.21.132` | 连接互联网、Windows 开发机与本地 Agent |
+| Face Bridge | ROS Domain `0` | 人脸检测、识别、深度距离估算与结果发布 |
 
-@inproceedings{an_2022_pfc_cvpr,
-  title={Killing Two Birds with One Stone: Efficient and Robust Training of Face Recognition CNNs by Partial FC},
-  author={An, Xiang and Deng, Jiangkang and Guo, Jia and Feng, Ziyong and Zhu, Xuhan and Jing, Yang and Tongliang, Liu},
-  booktitle={CVPR},
-  year={2022}
-}
-@inproceedings{an_2021_pfc_iccvw,
-  title={Partial FC: Training 10 Million Identities on a Single Machine},
-  author={An, Xiang and Zhu, Xuhan and Gao, Yuan and Xiao, Yang and Zhao, Yongle and Feng, Ziyong and Wu, Lan and Qin, Bin and Zhang, Ming and Zhang, Debing and Fu, Ying},
-  booktitle={ICCVW},
-  year={2021},
-}
+## 已实现能力
 
+- 多身份文件夹录入，例如 `FACE_TEAM_001`、`FACE_TEAM_002`。
+- 自动选择画面中面积最大且接近中心的主脸，过滤背景小人脸。
+- 对不足 15 张的身份进行轻量、确定性数据增强。
+- InsightFace `buffalo_l` 检测与 512 维归一化 embedding 提取。
+- SQLite 多模板人脸库和稳定的外部 `person_id`。
+- 余弦相似度、`UNKNOWN` 拒识和 Top-1/Top-2 margin 判断。
+- 分组留一验证：验证时同时排除原图及其增强副本，避免数据泄漏。
+- ROS2 RGB/Depth 图像解析和人脸区域深度中值估算。
+- ROS2 JSON 结果发布与本机 UDP Agent 输出。
+- DGX Spark ARM64 Docker、CycloneDDS 和双网卡配置。
 
-@inproceedings{deng2020subcenter,
-  title={Sub-center ArcFace: Boosting Face Recognition by Large-scale Noisy Web Faces},
-  author={Deng, Jiankang and Guo, Jia and Liu, Tongliang and Gong, Mingming and Zafeiriou, Stefanos},
-  booktitle={Proceedings of the IEEE Conference on European Conference on Computer Vision},
-  year={2020}
-}
+## 当前验证结果
 
-@inproceedings{Deng2020CVPR,
-title = {RetinaFace: Single-Shot Multi-Level Face Localisation in the Wild},
-author = {Deng, Jiankang and Guo, Jia and Ververas, Evangelos and Kotsia, Irene and Zafeiriou, Stefanos},
-booktitle = {CVPR},
-year = {2020}
-}
+开发数据包含 001 的 15 张原图、002 的 12 张原图和 3 张轻量增强图。
 
-@inproceedings{guo2018stacked,
-  title={Stacked Dense U-Nets with Dual Transformers for Robust Face Alignment},
-  author={Guo, Jia and Deng, Jiankang and Xue, Niannan and Zafeiriou, Stefanos},
-  booktitle={BMVC},
-  year={2018}
-}
+| 人员 | 分组验证原图 | 正确 | 最低同人相似度 |
+|---|---:|---:|---:|
+| `FACE_TEAM_001` | 15 | 15 | 0.695 |
+| `FACE_TEAM_002` | 12 | 12 | 0.705 |
+| 合计 | 27 | 27 | 0.695 |
 
-@article{deng2018menpo,
-  title={The Menpo benchmark for multi-pose 2D and 3D facial landmark localisation and tracking},
-  author={Deng, Jiankang and Roussos, Anastasios and Chrysos, Grigorios and Ververas, Evangelos and Kotsia, Irene and Shen, Jie and Zafeiriou, Stefanos},
-  journal={IJCV},
-  year={2018}
-}
+- 分组验证正确率：`27/27`。
+- 两人之间最高错误候选相似度：`0.139`。
+- 001 独立测试图：相似度 `0.896`，与 002 的 margin 为 `0.821`。
+- 当前默认阈值：`0.40`；默认最小 margin：`0.05`。
 
-@inproceedings{deng2018arcface,
-title={ArcFace: Additive Angular Margin Loss for Deep Face Recognition},
-author={Deng, Jiankang and Guo, Jia and Niannan, Xue and Zafeiriou, Stefanos},
-booktitle={CVPR},
-year={2019}
+这些结果只证明当前受控数据上的功能闭环，不代表生产环境准确率。进入实际 G1 场景后仍需使用真实距离、光照、运动模糊和团队外人员数据重新标定。
+
+## 目录结构
+
+```text
+docs/
+  NEW_FACE.MD                         方案与识别原理
+  G1_DGX_FACE_BRIDGE.md               G1-DGX 桥接与消息结构
+examples/team_face_recognition/
+  team_face_demo.py                   预处理、录入、验证和单图识别 CLI
+  g1_face_bridge.py                   ROS2/DDS RGB/Depth -> Agent 中间件
+  test_team_face_demo.py              人脸库与匹配测试
+  test_g1_face_bridge.py              RGB/Depth/UDP 桥接测试
+  deploy/
+    Dockerfile                        DGX Spark ARM64 运行镜像
+    Dockerfile.dockerignore           排除模型、数据库和隐私数据
+    compose.yaml                      host-network 常驻服务
+    cyclonedds.xml                    固定使用 G1 网口 enP7s7
+    .env.example                      话题和 Agent 输出配置
+python-package/                       本项目使用的 InsightFace Python 包
+```
+
+人脸照片、ONNX 模型、预处理图和 SQLite 数据库不会进入 Git：
+
+```text
+face_datasets/                        本地原始人脸数据
+.face_demo/                           Windows Demo 运行产物
+deploy/runtime/models/                DGX 模型挂载目录
+deploy/runtime/data/                  DGX SQLite 挂载目录
+```
+
+## Windows Demo
+
+### 1. 创建环境
+
+建议使用 Python 3.12：
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e .\python-package
+```
+
+首次运行 `FaceAnalysis` 时会下载模型，也可以自行放置已获得授权的模型。
+
+### 2. 准备数据
+
+每个身份使用独立文件夹，文件夹名就是稳定人员 ID：
+
+```text
+face_datasets/
+  FACE_TEAM_001/
+    image_01.jpg
+    image_02.jpg
+  FACE_TEAM_002/
+    image_01.jpg
+  test_data/
+    independent_query.jpg
+```
+
+`test_data` 会被明确排除，不会录入人脸库。
+
+### 3. 预处理与增强
+
+```powershell
+.\.venv\Scripts\python.exe .\examples\team_face_recognition\team_face_demo.py preprocess `
+  --input .\face_datasets `
+  --output .\.face_demo\preprocessed `
+  --augment-to 15
+```
+
+### 4. 创建 SQLite 人脸库
+
+```powershell
+.\.venv\Scripts\python.exe .\examples\team_face_recognition\team_face_demo.py enroll `
+  --input .\.face_demo\preprocessed `
+  --db .\.face_demo\team_faces.sqlite3 `
+  --replace
+```
+
+### 5. 分组验证
+
+```powershell
+.\.venv\Scripts\python.exe .\examples\team_face_recognition\team_face_demo.py validate `
+  --db .\.face_demo\team_faces.sqlite3 `
+  --json-output .\.face_demo\validation.json
+```
+
+### 6. 单图识别
+
+```powershell
+.\.venv\Scripts\python.exe .\examples\team_face_recognition\team_face_demo.py recognize `
+  --image .\face_datasets\test_data\independent_query.jpg `
+  --db .\.face_demo\team_faces.sqlite3 `
+  --output .\.face_demo\recognized.jpg `
+  --json-output .\.face_demo\recognized.json
+```
+
+## DGX Spark 部署
+
+目标环境：ARM64、Ubuntu 24.04、Docker、ROS2 Jazzy、CycloneDDS。
+
+### 1. 准备只读运行数据
+
+```bash
+cd examples/team_face_recognition/deploy
+mkdir -p runtime/models/buffalo_l runtime/data
+
+# 仅需要检测与识别模型
+cp /path/to/det_10g.onnx runtime/models/buffalo_l/
+cp /path/to/w600k_r50.onnx runtime/models/buffalo_l/
+cp /path/to/team_faces.sqlite3 runtime/data/
+```
+
+### 2. 配置 ROS2 话题
+
+```bash
+cp .env.example .env
+```
+
+默认值：
+
+```dotenv
+ROS_DOMAIN_ID=0
+RGB_TOPIC=/camera/camera/color/image_raw
+DEPTH_TOPIC=/camera/camera/aligned_depth_to_color/image_raw
+RESULT_TOPIC=/ai/face_recognition/results
+MAX_RATE_HZ=5
+AGENT_UDP_HOST=127.0.0.1
+AGENT_UDP_PORT=17171
+```
+
+G1 上的 RealSense 话题可能使用自定义命名空间，部署前必须用 `ros2 topic list -t` 确认并修改 `.env`。
+
+### 3. 构建并启动
+
+```bash
+docker compose build
+docker compose up -d
+docker compose logs -f g1-face-bridge
+```
+
+容器使用 host network；CycloneDDS 只绑定 `enP7s7`，不会把机器人 DDS 流量发送到外联网卡。
+
+## Agent 接口
+
+每次处理 RGB 帧后，桥接服务同时发布：
+
+1. ROS2 `std_msgs/String`：`/ai/face_recognition/results`
+2. UDP JSON：`127.0.0.1:17171`
+
+消息示例：
+
+```json
+{
+  "schema_version": 1,
+  "event": "face_recognition",
+  "sequence": 42,
+  "timestamp_ns": 1783742400000000000,
+  "source": {
+    "frame_id": "camera_color_optical_frame",
+    "rgb_topic": "/camera/camera/color/image_raw",
+    "depth_topic": "/camera/camera/aligned_depth_to_color/image_raw",
+    "depth_age_ms": 18.2
+  },
+  "faces": [
+    {
+      "face_index": 0,
+      "person_id": "FACE_TEAM_001",
+      "status": "KNOWN",
+      "similarity": 0.896117,
+      "margin": 0.821183,
+      "reason": "matched",
+      "det_score": 0.781573,
+      "bbox": [694.07, 999.25, 2153.16, 3045.44],
+      "distance_m": 1.42
+    }
+  ],
+  "inference_ms": 73.5,
+  "model": "buffalo_l"
 }
 ```
 
-## Contributing
+服务不会向 Agent 发送原始图像或 embedding。
 
-Main contributors:
+## 测试
 
-- [Jia Guo](https://github.com/nttstar), ``guojia[at]gmail.com``
-- [Jiankang Deng](https://github.com/jiankangdeng) ``jiankangdeng[at]gmail.com``
-- [Xiang An](https://github.com/anxiangsir) ``anxiangsir[at]gmail.com``
-- [Jack Yu](https://github.com/szad670401) ``jackyu961127[at]gmail.com``
-- [Baris Gecer](https://barisgecer.github.io/) ``barisgecer[at]msn.com``
- ``
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover `
+  -s .\examples\team_face_recognition `
+  -p "test_*.py" `
+  -v
+```
+
+当前包含 8 个单元测试，覆盖：
+
+- SQLite 特征读写与 gallery 聚合；
+- `KNOWN` / `UNKNOWN` 与 margin 匹配；
+- 测试目录隔离和数据增强；
+- ROS RGB 编码转换；
+- `16UC1` 深度到米的转换；
+- 人脸区域距离中值；
+- Agent UDP JSON 发布。
+
+## 隐私与安全
+
+- 人脸照片和 embedding 都属于敏感生物特征数据，不应提交到 Git 或公共对象存储。
+- SQLite 和模型在 DGX 上通过只读 volume 挂载。
+- 对 Agent 只发布人员 ID、分数、框和距离，不发布 embedding。
+- 当前方案没有活体检测，不能直接用于门禁、支付或高风险身份授权。
+- 阈值必须使用团队外人员和真实机器人采集数据重新标定。
+
+## 许可证与上游项目
+
+本仓库基于 InsightFace 开发，并保留上游代码。InsightFace 代码采用 MIT License；训练数据、预训练模型和模型包可能具有不同的授权限制。`buffalo_l` 等模型用于商业项目之前，请根据 [InsightFace 官方说明](https://github.com/deepinsight/insightface)确认授权。
+
+感谢 InsightFace、Unitree Robotics、Intel RealSense、ROS2 与 CycloneDDS 社区。
