@@ -60,10 +60,26 @@ starting value, not a calibrated security threshold.
 
 ## G1 to DGX bridge
 
+真机日常启动、Agent 订阅、验收和故障排查请参阅
+[`docs/G1_FACE_RECOGNITION_USER_GUIDE.md`](../../docs/G1_FACE_RECOGNITION_USER_GUIDE.md)。
+
 `g1_face_bridge.py` subscribes ROS2 RGB and aligned-depth images, runs the same
-SQLite gallery matcher, publishes JSON on `/ai/face_recognition/results`, and
+SQLite gallery matcher, publishes internal JSON on
+`/ai/face_recognition/internal`, relays native `g1_hri.msg.FaceRecognition` on
+`rt/g1/hri/vision/face_recognition`, and
 also sends the JSON event to a local Agent over UDP `127.0.0.1:17171`.
 
-The reproducible DGX Spark container deployment is under `deploy/`. It uses
-host networking and CycloneDDS bound to the G1-facing `enP7s7` interface. Topic
+The reproducible DGX Spark container deployment is under `deploy/`. Camera
+transport is isolated on ROS domain 10 and uses Fast DDS on both ORIN and DGX;
+native Unitree Agent events remain on domain 0 and interface `enP7s7`. Topic
 names and output addresses are configured in `deploy/.env`.
+
+Agent-facing results use native Unitree SDK2 DDS rather than a ROS2 message:
+
+- Topic: `rt/g1/hri/vision/face_recognition`
+- Type: `g1_hri.msg.FaceRecognition`
+- Relay: user service `g1-face-dds-relay.service`
+- Agent example: `agent_face_subscriber.py enP7s7 --domain 0`
+
+The ROS2 `std_msgs/String` topic `/ai/face_recognition/internal` is reserved for
+container diagnostics so it cannot conflict with the native DDS topic type.

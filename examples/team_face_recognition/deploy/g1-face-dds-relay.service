@@ -1,0 +1,16 @@
+[Unit]
+Description=G1 face recognition UDP to native DDS relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/insightface-g1/examples/team_face_recognition
+ExecStart=%h/moonbot/speech_service/.venv/bin/python %h/insightface-g1/examples/team_face_recognition/face_dds.py enP7s7 --domain 0 --udp-host 127.0.0.1 --udp-port 17171
+Restart=on-failure
+RestartSec=2
+TimeoutStopSec=8
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

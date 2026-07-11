@@ -15,16 +15,19 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        ros-${ROS_DISTRO}-ros-base \
        ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
+       ros-${ROS_DISTRO}-rmw-fastrtps-cpp \
     && rm -rf /var/lib/apt/lists/* /tmp/ros2-apt-source.deb
 
 WORKDIR /app
 COPY python-package /app/python-package
-COPY examples/team_face_recognition /app/team_face_recognition
 
 RUN python3 -m pip install --no-cache-dir \
       onnx onnxruntime opencv-python-headless requests scipy scikit-image tqdm \
-    && python3 -m pip install --no-cache-dir --no-deps /app/python-package \
-    && chmod +x /app/team_face_recognition/deploy/entrypoint.sh
+    && python3 -m pip install --no-cache-dir --no-deps /app/python-package
+
+# Keep application-only changes out of the expensive ARM64 dependency layer.
+COPY examples/team_face_recognition /app/team_face_recognition
+RUN chmod +x /app/team_face_recognition/deploy/entrypoint.sh
 
 ENV ROS_DISTRO=${ROS_DISTRO}
 ENTRYPOINT ["/app/team_face_recognition/deploy/entrypoint.sh"]
